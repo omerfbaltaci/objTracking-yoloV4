@@ -1,42 +1,78 @@
-1. **Importing Libraries**:
-   - `numpy`: Utilized for numerical computations and matrix operations.
-   - `cv2`: The OpenCV library, employed for image processing.
-   - `ObjectDetection`: A specialized module for object detection.
-   - `math`: Used for mathematical computations, particularly distance calculations.
+# objTracking-yoloV4
 
-2. **Euclidean Distance Calculation Function**:
-   - `sq_euclidean_distance`: Computes the squared Euclidean distance between two points.
+## Project Description
+This project implements a vehicle tracking system using YOLOv4 for object detection and a custom tracking algorithm. It processes video input to detect and track vehicles, assigning unique IDs to each detected vehicle and visualizing their movements in real-time.
 
-3. **Initializing Object Detector**:
-   - An instance of the `ObjectDetection` class is created.
-   - Variables for frame counter (`count`), previous frame points (`prev_points`), car tracking dictionary (`car_tracking`), and car ID (`car_id`) are defined.
+## Features
+- Object detection using YOLOv4
+- Vehicle tracking with unique ID assignment
+- Real-time visualization of tracked vehicles
+- Euclidean distance-based tracking algorithm
+- Processing of video input
+- GPU acceleration support using CUDA
 
-4. **Opening Video Source**:
-   - The video file `highway.mp4` is opened using `cv2.VideoCapture`.
+## Project Structure
+- `ObjectTracking.py`: Main script for vehicle tracking
+- `ObjectDetection.py`: Contains the ObjectDetection class for YOLOv4 implementation
+- `dnn_model/`: Directory containing YOLOv4 weights, configuration, and class names
 
-5. **Reading and Processing Video Frames**:
-   - Each frame is read and resized.
-   - The loop is exited if the frame is not available.
-   - The `current_points` list is utilized to store the central points of objects in the current frame.
+## Prerequisites
+- Python 3.x
+- OpenCV (cv2)
+- NumPy
+- CUDA-capable GPU (for GPU acceleration)
 
-6. **Object Detection**:
-   - The `oD.detect` method is employed to detect objects in the frame, returning class labels, scores, and bounding boxes.
-   - For each detected object, central points are calculated and appended to the `current_points` list.
-   - Detected objects are highlighted with rectangles drawn on the frame.
+## Installation
+1. Clone the repository:
+   ```
+   git clone https://github.com/omerfbaltaci/objTracking-yoloV4.git
+   cd objTracking-yoloV4
+   ```
+2. Install the required packages:
+   ```
+   pip install opencv-python numpy
+   ```
 
-7. **Vehicle Tracking**:
-   - For the initial two frames, distances between previous and current points are computed. Distances less than 30 pixels result in a new vehicle ID being assigned and added to the `car_tracking` dictionary.
-   - In subsequent frames, the positions of existing vehicles are updated or new vehicles are added.
-   - Distances between points in previous and current frames are calculated to update the positions of matched objects.
-   - For unmatched objects, a new vehicle ID is assigned and added to the `car_tracking` dictionary.
+Note: The necessary YOLOv4 weights, configuration files, and class names are already included in the repository.
 
-8. **Displaying Vehicles on Frame**:
-   - For each vehicle in the `car_tracking` dictionary, a circle is drawn at the vehicle's center, and the vehicle ID is displayed as text.
+## Usage
+1. Place your input video file (named `highway2.mp4`) in the project directory.
+2. Run the main script:
+   ```
+   python ObjectTracking.py
+   ```
+3. The processed video will be displayed, showing tracked vehicles with their IDs.
+4. Press 'q' to exit the program.
 
-9. **Displaying Information and Frame**:
-   - Vehicle tracking information and the remaining points in the current frame are printed.
-   - The frame is displayed.
-   - The loop is terminated and video processing ends upon a key press.
+## How It Works
 
-10. **Releasing Resources**:
-    - The video source is released, and all OpenCV windows are closed.
+### ObjectDetection.py
+- Initializes the YOLOv4 model using OpenCV's DNN module
+- Configures the model for GPU acceleration using CUDA
+- Provides methods for loading class names and performing object detection
+
+### ObjectTracking.py
+1. Initializes the ObjectDetection class and video capture
+2. For each frame:
+   - Performs object detection using YOLOv4
+   - Calculates center points of detected objects
+   - Implements a tracking algorithm based on Euclidean distance
+   - Assigns and maintains unique IDs for tracked vehicles
+   - Visualizes tracked vehicles with circles and ID labels
+3. Displays the processed frame and updates tracking information
+
+## Configuration
+- Adjust `nmsThreshold` and `confThreshold` in `ObjectDetection.py` to fine-tune detection sensitivity
+- Modify the distance threshold (currently 20 pixels) in `ObjectTracking.py` to adjust tracking sensitivity
+
+## Contributing
+Contributions to improve the project are welcome. Please follow these steps:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Acknowledgments
+- YOLOv4 for object detection
+- OpenCV community for computer vision tools and DNN module
